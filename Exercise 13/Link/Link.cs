@@ -54,7 +54,8 @@ namespace Linklaget
             Array.Clear(buffer, 0, buffer.Length);
             char[] startChar = { Convert.ToChar(DELIMITER) };
 
-			serialPort.Write(DELIMITER.ToString());
+            
+			serialPort.Write(new[] {DELIMITER}, 0, 1);
 			/*if(serialPort.WriteBufferSize != 1){
 				Console.WriteLine (this.GetType().Name + ": Serial port failed to write " + startChar.ToString());
 				return;
@@ -89,7 +90,7 @@ namespace Linklaget
 				//return;
 			}*/
 
-			serialPort.Write (startChar, 0, 1);
+			serialPort.Write (new [] {DELIMITER}, 0, 1);
 			/*if(serialPort.WriteBufferSize != 1){
 				Console.WriteLine (this.GetType().Name + ": Serial port failed to write " + startChar.ToString());
 				//return;
