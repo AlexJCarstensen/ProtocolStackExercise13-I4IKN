@@ -38,10 +38,14 @@ namespace Application
 			Transport transport = new Transport(BUFSIZE);
 
             Console.WriteLine("Waiting for client...");
-		    if(transport.receive(ref fileName) < 1) return;
+		    var fileLength = transport.receive(ref fileName);
+            if (fileLength < 1) return;
 
             Console.WriteLine("Server recieved " + LIB.GetString(fileName) + " from client.");
-		    long fileSize = LIB.check_File_Exists(LIB.GetString(fileName));
+
+		    var actualFileName = new byte[fileLength];
+		    Array.Copy(fileName, actualFileName, fileLength);
+            long fileSize = LIB.check_File_Exists(LIB.GetString(actualFileName));
 
             SendFile(LIB.GetString(fileName), fileSize, transport);
         }
