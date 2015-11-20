@@ -64,7 +64,7 @@ namespace Application
 		{
             // TO DO Your own code
             string filePath = @"/home/ikn/Desktop/" + fileName;
-            long fileSize = LIB.check_File_Exists(filePath);
+		    long fileSize = 177562;//LIB.check_File_Exists(filePath);
             Console.WriteLine(fileSize);
 
 
