@@ -29,6 +29,12 @@ namespace Application
 	    private file_client(String[] args)
 	    {
 	    	// TO DO Your own code
+            Transport transport = new Transport(BUFSIZE);
+		    string file = @"/home/ikn/Desktop/images.jpeg";
+            byte[] fileName = LIB.GetByteArray(file);
+            transport.send(fileName, fileName.Length);
+
+		    receiveFile(LIB.extractFileName(file), transport);
 	    }
 
 		/// <summary>
@@ -42,8 +48,43 @@ namespace Application
 		/// </param>
 		private void receiveFile (String fileName, Transport transport)
 		{
-			// TO DO Your own code
-		}
+            // TO DO Your own code
+            string filePath = @"/home/ikn/Desktop/" + fileName;
+            long fileSize = LIB.check_File_Exists(filePath);
+            Console.WriteLine(fileSize);
+
+
+            FileStream fileStream = new FileStream(filePath, FileMode.Append);
+            BinaryWriter binWriter = new BinaryWriter(fileStream);
+
+            bool run = true;
+
+            while (run)
+            {
+                long size;
+                if (fileSize < BUFSIZE)
+                    size = fileSize;
+                else
+                    size = BUFSIZE;
+
+                fileSize -= size;
+
+
+                byte[] byteFile = new byte[size];
+
+                transport.receive(ref byteFile);
+
+                binWriter.Write(byteFile);
+
+
+                if (fileSize < 1)
+                {
+                    run = false;
+                }
+            }
+            binWriter.Close();
+            fileStream.Close();
+        }
 
 		/// <summary>
 		/// The entry point of the program, where the program control starts and ends.

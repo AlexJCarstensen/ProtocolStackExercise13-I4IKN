@@ -68,10 +68,10 @@ namespace Transportlaget
 					buf[(int)TransCHKSUM.SEQNO] != seqNo ||
 					buf[(int)TransCHKSUM.TYPE] != (int)TransType.ACK)
 				return false;
-			
-			seqNo = [(int)TransCHKSUM.SEQNO] + 1) % 2;
-			
-			return true;
+
+            seqNo = (byte)((Convert.ToInt32(buffer[(int)TransCHKSUM.SEQNO]) + 1) % 2);
+
+            return true;
 		}
 
 		/// <summary>
@@ -84,7 +84,7 @@ namespace Transportlaget
 		{
 			byte[] ackBuf = new byte[(int)TransSize.ACKSIZE];
 			ackBuf [(int)TransCHKSUM.SEQNO] = (byte)
-					(ackType ? (byte)(buffer (byte)buffer [(int)TransCHKSUM.SEQNO] : [(int)TransCHKSUM.SEQNO] + 1) % 2);
+					(ackType ? buffer [(int)TransCHKSUM.SEQNO] : (Convert.ToInt32(buffer[(int)TransCHKSUM.SEQNO]) + 1) % 2);
 			ackBuf [(int)TransCHKSUM.TYPE] = (byte)(int)TransType.ACK;
 			checksum.calcChecksum (ref ackBuf, (int)TransSize.ACKSIZE);
 
@@ -103,6 +103,21 @@ namespace Transportlaget
 		public void send(byte[] buf, int size)
 		{
 			// TO DO Your own code
+            Array.Clear(buffer,0 , buffer.Length);
+			do {
+				for(int i = 0; i < size; i++)
+				{
+					buffer[i+4] = buf[i];
+				}
+
+				buffer[(int)TransCHKSUM.SEQNO] = seqNo;
+				buffer[(int)TransCHKSUM.TYPE] = (byte)TransType.DATA;
+
+				checksum.calcChecksum(ref buffer, size + 4);
+
+				link.send (buffer, size + 4);
+
+			} while(!receiveAck());
 		}
 
 		/// <summary>
@@ -114,6 +129,27 @@ namespace Transportlaget
 		public int receive (ref byte[] buf)
 		{
 			// TO DO Your own code
+			while (true) {
+				int recievedSize = link.receive (ref buffer);
+				while(!checksum.checkChecksum(buffer, recievedSize)){
+
+					sendAck(false);
+
+					recievedSize = link.receive (ref buffer);
+					Console.WriteLine (this.GetType().Name + ": checksum error. Error count = " + errorCount++);
+				}
+
+				sendAck (true);
+
+				if (seqNo == buffer [(int)TransCHKSUM.SEQNO]) {
+					seqNo = (byte)((Convert.ToInt32(buffer[(int)TransCHKSUM.SEQNO]) + 1) % 2);
+
+					for (int i = 0; i < recievedSize; i++) {
+						buf [i] = buffer [i + 4];
+					}
+					return recievedSize - 4;
+				}
+			}
 		}
 	}
 }
