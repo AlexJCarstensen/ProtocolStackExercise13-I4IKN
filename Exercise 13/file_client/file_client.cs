@@ -29,7 +29,7 @@ namespace Application
 		/// </param>
 	    private file_client(String[] args)
 	    {
-            /*SerialPort serialPort = new SerialPort("/dev/ttyS0", 115200, Parity.None, 8, StopBits.One);
+            SerialPort serialPort = new SerialPort("/dev/ttyS1", 115200, Parity.None, 8, StopBits.One);
 
             if (!serialPort.IsOpen)
                 serialPort.Open();
@@ -40,15 +40,15 @@ namespace Application
             Console.WriteLine("Write a string to terminate");
             var input = Console.ReadLine();
             if (serialPort.IsOpen)
-                serialPort.Close();*/
+                serialPort.Close();
 
             // TO DO Your own code
-            Transport transport = new Transport(BUFSIZE);
+            /*Transport transport = new Transport(BUFSIZE);
 		    string file = @"/home/ikn/Desktop/images.jpeg";
             byte[] fileName = LIB.GetByteArray(file);
             transport.send(fileName, fileName.Length);
 
-		    receiveFile(LIB.extractFileName(file), transport);
+		    receiveFile(LIB.extractFileName(file), transport);*/
         }
 
 		/// <summary>

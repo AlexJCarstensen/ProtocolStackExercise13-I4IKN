@@ -140,7 +140,7 @@ namespace Transportlaget
 				}
 
 				sendAck (true);
-                Console.WriteLine("Ack been sent");
+                
 				if (seqNo == buffer [(int)TransCHKSUM.SEQNO]) {
 					seqNo = (byte)((Convert.ToInt32(buffer[(int)TransCHKSUM.SEQNO]) + 1) % 2);
 
