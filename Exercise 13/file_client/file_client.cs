@@ -31,7 +31,7 @@ namespace Application
 	    {
             // TO DO Your own code
             Transport transport = new Transport(BUFSIZE);
-		    string file = @"/home/ikn/Desktop/images.jpeg";
+		    string file = @"/home/ikn/Desktop/test.png";
             byte[] fileName = LIB.GetByteArray(file);
             transport.send(fileName, fileName.Length);
 
