@@ -132,11 +132,11 @@ namespace Linklaget
 		    tempDataCounter = 0;
 		    for (int i = 0; i < realDataCounter; i++)
 		    {
-		        if (tempData[tempDataCounter] == 'B' && tempData[tempDataCounter] == 'C')
+		        if (tempData[tempDataCounter] == 'B' && tempData[tempDataCounter + 1] == 'C')
 		        {
 		            buf[i] = Convert.ToByte('A');
 		            tempDataCounter += 2;
-		        } else if (tempData[tempDataCounter] == 'B' && tempData[tempDataCounter] == 'D')
+		        } else if (tempData[tempDataCounter] == 'B' && tempData[tempDataCounter + 1] == 'D')
 		        {
 		            buf[i] = Convert.ToByte('B');
 		            tempDataCounter += 2;
@@ -147,7 +147,7 @@ namespace Linklaget
 		            realDataCounter++;
 		        }
 		    }
-
+            Console.WriteLine("From: " + this.GetType().Name + " recieved " + buf.ToString());
 		    return realDataCounter;
 		}
 	}
