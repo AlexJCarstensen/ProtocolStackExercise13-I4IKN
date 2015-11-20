@@ -123,10 +123,12 @@ namespace Linklaget
 			} while(Convert.ToChar(startChar[0]) != 'A');*/
 
 			
-			do{
-				serialPort.Read(tempData, tempDataCounter, 1);
+			do
+			{
+			    tempData[tempDataCounter] = (byte)serialPort.ReadByte();
+				//serialPort.Read(tempData, tempDataCounter, 1);
 				tempDataCounter++;
-			}while(Convert.ToChar(tempData[tempDataCounter - 1]) != 'A');
+			}while(tempData[tempDataCounter - 1] != 'A');
 
 			tempDataCounter--;
 
