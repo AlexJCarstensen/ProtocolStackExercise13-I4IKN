@@ -34,7 +34,12 @@ namespace Application
 		    Array.Copy(fileName, actualFileName, fileLength);
             long fileSize = LIB.check_File_Exists(LIB.GetString(actualFileName));
 
-            SendFile(LIB.GetString(actualFileName), fileSize, transport);
+		    if (fileSize > 0)
+		        SendFile(LIB.GetString(actualFileName), fileSize, transport);
+		    else
+		    {
+		        var send = LIB.GetByteArray("File not exist");
+		    }
         }
 
 		/// <summary>
