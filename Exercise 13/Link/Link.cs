@@ -30,8 +30,8 @@ namespace Linklaget
 		/// </summary>
 		public Link (int BUFSIZE)
 		{
-			// Create a new SerialPort object with default settings.
 			serialPort = new SerialPort("/dev/ttyS1",115200,Parity.None,8,StopBits.One);
+		    serialPort.ReadTimeout = 1000;
 
 			if(!serialPort.IsOpen)
 				serialPort.Open();
@@ -54,10 +54,6 @@ namespace Linklaget
             Array.Clear(buffer, 0, buffer.Length);
 
 			serialPort.Write(new[] {DELIMITER}, 0, 1);
-			/*if(serialPort.WriteBufferSize != 1){
-				Console.WriteLine (this.GetType().Name + ": Serial port failed to write " + startChar.ToString());
-				return;
-			}*/
 
 
 			int bufferCounter = 0;
@@ -83,16 +79,7 @@ namespace Linklaget
 				}
 			}
 			serialPort.Write (buffer, 0, bufferCounter);
-			/*if(serialPort.WriteBufferSize != bufferCounter){
-				Console.WriteLine (this.GetType().Name + ": Serial port failed to write " + buffer.ToString());
-				//return;
-			}*/
-
 			serialPort.Write (new [] {DELIMITER}, 0, 1);
-			/*if(serialPort.WriteBufferSize != 1){
-				Console.WriteLine (this.GetType().Name + ": Serial port failed to write " + startChar.ToString());
-				//return;
-			}*/
 
 		}
 
@@ -108,26 +95,29 @@ namespace Linklaget
 		public int receive (ref byte[] buf)
 		{
             // TO DO Your own code
-
             int tempDataCounter = 0;
 		    int realDataCounter = 0;
-            byte[] startChar = new byte[1];
+
             byte[] tempData = new byte[buf.Length * 2 + 6];
 
-		    while (serialPort.ReadChar() != 'A'){}
 
-            /*do
-            {
-				serialPort.Read(startChar, 0, 1);
-			} while(Convert.ToChar(startChar[0]) != 'A');*/
 
-			
-			do
+		    try
+		    {
+		        while (serialPort.ReadChar() != DELIMITER)
+		        {
+		        }
+		    }
+		    catch (TimeoutException)
+		    {
+		        return 0;
+		    }
+
+            do
 			{
 			    tempData[tempDataCounter] = (byte)serialPort.ReadByte();
-				//serialPort.Read(tempData, tempDataCounter, 1);
 				tempDataCounter++;
-			}while(tempData[tempDataCounter - 1] != 'A');
+			}while(tempData[tempDataCounter - 1] != DELIMITER);
 
 			tempDataCounter--;
 
@@ -138,7 +128,7 @@ namespace Linklaget
 		    {
 		        if (tempData[tempDataCounter] == 'B' && tempData[tempDataCounter + 1] == 'C')
 		        {
-		            buf[i] = Convert.ToByte('A');
+		            buf[i] = Convert.ToByte(DELIMITER);
 		            tempDataCounter += 2;
 		        } else if (tempData[tempDataCounter] == 'B' && tempData[tempDataCounter + 1] == 'D')
 		        {
@@ -151,7 +141,6 @@ namespace Linklaget
 		            tempDataCounter++;
 		        }
 		    }
-            Console.WriteLine("From: " + this.GetType().Name + " recieved " + LIB.GetString(buf));
 		    return realDataCounter;
 		}
 	}

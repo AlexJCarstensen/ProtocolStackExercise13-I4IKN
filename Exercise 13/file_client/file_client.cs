@@ -29,19 +29,6 @@ namespace Application
 		/// </param>
 	    private file_client(String[] args)
 	    {
-            /*SerialPort serialPort = new SerialPort("/dev/ttyS1", 115200, Parity.None, 8, StopBits.One);
-
-            if (!serialPort.IsOpen)
-                serialPort.Open();
-
-            Console.WriteLine("Serial port opened...");
-            serialPort.Write("A");
-
-            Console.WriteLine("Write a string to terminate");
-            var input = Console.ReadLine();
-            if (serialPort.IsOpen)
-                serialPort.Close();*/
-
             // TO DO Your own code
             Transport transport = new Transport(BUFSIZE);
 		    string file = @"/home/ikn/Desktop/images.jpeg";
@@ -64,8 +51,6 @@ namespace Application
 		{
             // TO DO Your own code
             string filePath = @"/home/ikn/Desktop/" + fileName;
-		    long fileSize = 177562;//LIB.check_File_Exists(filePath);
-            Console.WriteLine(fileSize);
 
 
             FileStream fileStream = new FileStream(filePath, FileMode.Append);
@@ -75,26 +60,15 @@ namespace Application
 
             while (run)
             {
-                long size;
-                if (fileSize < BUFSIZE)
-                    size = fileSize;
+                var byteFile = new byte[BUFSIZE];
+
+                var size = transport.receive(ref byteFile);
+
+                if (size > 0)
+                    binWriter.Write(byteFile, 0, size);
                 else
-                    size = BUFSIZE;
-
-                fileSize -= size;
-
-
-                byte[] byteFile = new byte[size];
-
-                transport.receive(ref byteFile);
-
-                binWriter.Write(byteFile);
-
-
-                if (fileSize < 1)
-                {
                     run = false;
-                }
+
             }
             binWriter.Close();
             fileStream.Close();

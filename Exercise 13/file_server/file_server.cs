@@ -20,19 +20,6 @@ namespace Application
 		/// </summary>
 		private file_server ()
 		{
-            /*SerialPort serialPort = new SerialPort("/dev/ttyS1", 115200, Parity.None, 8, StopBits.One);
-
-            if (!serialPort.IsOpen)
-                serialPort.Open();
-            byte[] bytes = new byte[1000];
-            Console.WriteLine("Serial port opened...");
-            Console.WriteLine(serialPort.Read(bytes, 0, 1));
-
-            Console.WriteLine("Write a string to terminate");
-            var input = Console.ReadLine();
-            if (serialPort.IsOpen)
-                serialPort.Close();*/
-
             // TO DO Your own code
             byte[] fileName = new byte[BUFSIZE];
 			Transport transport = new Transport(BUFSIZE);

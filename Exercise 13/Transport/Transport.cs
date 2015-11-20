@@ -131,6 +131,7 @@ namespace Transportlaget
 			// TO DO Your own code
 			while (true) {
 				int recievedSize = link.receive (ref buffer);
+			    if (recievedSize == 0) return 0;
 				while(!checksum.checkChecksum(buffer, recievedSize)){
 
 					sendAck(false);
@@ -144,10 +145,10 @@ namespace Transportlaget
 				if (seqNo == buffer [(int)TransCHKSUM.SEQNO]) {
 					seqNo = (byte)((Convert.ToInt32(buffer[(int)TransCHKSUM.SEQNO]) + 1) % 2);
 
-					for (int i = 0; i < recievedSize; i++) {
+					for (int i = 0; i < recievedSize - 4; i++) {
 						buf [i] = buffer [i + 4];
 					}
-                    Console.WriteLine("From: " + this.GetType().Name + " recieved from client");
+
 					return recievedSize - 4;
 				}
 			}
