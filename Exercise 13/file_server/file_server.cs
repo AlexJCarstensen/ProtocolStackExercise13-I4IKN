@@ -47,7 +47,7 @@ namespace Application
 		    Array.Copy(fileName, actualFileName, fileLength);
             long fileSize = LIB.check_File_Exists(LIB.GetString(actualFileName));
 
-            SendFile(LIB.GetString(fileName), fileSize, transport);
+            SendFile(LIB.GetString(actualFileName), fileSize, transport);
         }
 
 		/// <summary>
