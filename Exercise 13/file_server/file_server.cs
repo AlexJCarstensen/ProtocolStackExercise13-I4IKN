@@ -20,7 +20,7 @@ namespace Application
 		/// </summary>
 		private file_server ()
 		{
-            SerialPort serialPort = new SerialPort("/dev/ttyS1", 115200, Parity.None, 8, StopBits.One);
+            /*SerialPort serialPort = new SerialPort("/dev/ttyS1", 115200, Parity.None, 8, StopBits.One);
 
             if (!serialPort.IsOpen)
                 serialPort.Open();
@@ -31,10 +31,10 @@ namespace Application
             Console.WriteLine("Write a string to terminate");
             var input = Console.ReadLine();
             if (serialPort.IsOpen)
-                serialPort.Close();
+                serialPort.Close();*/
 
             // TO DO Your own code
-            /*byte[] fileName = new byte[BUFSIZE];
+            byte[] fileName = new byte[BUFSIZE];
 			Transport transport = new Transport(BUFSIZE);
 
             Console.WriteLine("Waiting for client...");
@@ -43,7 +43,7 @@ namespace Application
             Console.WriteLine("Server recieved " + LIB.GetString(fileName) + " from client.");
 		    long fileSize = LIB.check_File_Exists(LIB.GetString(fileName));
 
-            SendFile(LIB.GetString(fileName), fileSize, transport);*/
+            SendFile(LIB.GetString(fileName), fileSize, transport);
         }
 
 		/// <summary>

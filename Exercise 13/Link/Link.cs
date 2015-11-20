@@ -115,10 +115,12 @@ namespace Linklaget
             byte[] startChar = new byte[1];
             byte[] tempData = new byte[buf.Length * 2 + 6];
 
-            do
+		    while (serialPort.ReadChar() != 'A'){}
+
+            /*do
             {
 				serialPort.Read(startChar, 0, 1);
-			} while(Convert.ToChar(startChar[0]) != 'A');
+			} while(Convert.ToChar(startChar[0]) != 'A');*/
 
 			
 			do{
