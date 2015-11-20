@@ -25,13 +25,15 @@ namespace Linklaget
 		/// </summary>
 		SerialPort serialPort;
 
+	    private int timeOut = 1000 * 30;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="link"/> class.
 		/// </summary>
 		public Link (int BUFSIZE)
 		{
 			serialPort = new SerialPort("/dev/ttyS1",115200,Parity.None,8,StopBits.One);
-		    serialPort.ReadTimeout = 1000;
+		    serialPort.ReadTimeout = timeOut;
 
 			if(!serialPort.IsOpen)
 				serialPort.Open();
