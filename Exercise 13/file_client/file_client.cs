@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using Transportlaget;
 using Library;
+using System.IO.Ports;
 
 namespace Application
 {
@@ -28,14 +29,27 @@ namespace Application
 		/// </param>
 	    private file_client(String[] args)
 	    {
-	    	// TO DO Your own code
-            Transport transport = new Transport(BUFSIZE);
+            SerialPort serialPort = new SerialPort("/dev/ttyS0", 115200, Parity.None, 8, StopBits.One);
+
+            if (!serialPort.IsOpen)
+                serialPort.Open();
+
+            Console.WriteLine("Serial port opened...");
+            serialPort.Write("A");
+
+            Console.WriteLine("Write a string to terminate");
+            var input = Console.ReadLine();
+            if (serialPort.IsOpen)
+                serialPort.Close();
+
+            // TO DO Your own code
+            /*Transport transport = new Transport(BUFSIZE);
 		    string file = @"/home/ikn/Desktop/images.jpeg";
             byte[] fileName = LIB.GetByteArray(file);
             transport.send(fileName, fileName.Length);
 
-		    receiveFile(LIB.extractFileName(file), transport);
-	    }
+		    receiveFile(LIB.extractFileName(file), transport);*/
+        }
 
 		/// <summary>
 		/// Receives the file.

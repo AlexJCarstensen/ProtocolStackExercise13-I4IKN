@@ -19,17 +19,29 @@ namespace Application
 		/// </summary>
 		private file_server ()
 		{
+            SerialPort serialPort = new SerialPort("/dev/ttyS0", 115200, Parity.None, 8, StopBits.One);
 
-			// TO DO Your own code
-			byte[] fileName = new byte[BUFSIZE];
+            if (!serialPort.IsOpen)
+                serialPort.Open();
+            byte[] bytes = new byte[1000];
+            Console.WriteLine("Serial port opened...");
+            Console.WriteLine(serialPort.Read(bytes, 0, 1));
+
+            Console.WriteLine("Write a string to terminate");
+            var input = Console.ReadLine();
+            if (serialPort.IsOpen)
+                serialPort.Close();
+
+            // TO DO Your own code
+            /*byte[] fileName = new byte[BUFSIZE];
 			Transport transport = new Transport(BUFSIZE);
 
 		    if(transport.receive(ref fileName) < 1) return;
 
 		    long fileSize = LIB.check_File_Exists(LIB.GetString(fileName));
 
-            SendFile(LIB.GetString(fileName), fileSize, transport);
-		}
+            SendFile(LIB.GetString(fileName), fileSize, transport);*/
+        }
 
 		/// <summary>
 		/// Sends the file.
