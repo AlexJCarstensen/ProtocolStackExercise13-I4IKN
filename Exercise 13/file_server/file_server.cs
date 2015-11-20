@@ -4,6 +4,7 @@ using System.Text;
 using Transportlaget;
 using Library;
 using System.IO.Ports;
+using System.Runtime.Remoting.Channels;
 
 namespace Application
 {
@@ -38,6 +39,7 @@ namespace Application
 
 		    if(transport.receive(ref fileName) < 1) return;
 
+            Console.WriteLine("Server recieved " + LIB.GetString(fileName) + " from client.");
 		    long fileSize = LIB.check_File_Exists(LIB.GetString(fileName));
 
             SendFile(LIB.GetString(fileName), fileSize, transport);
