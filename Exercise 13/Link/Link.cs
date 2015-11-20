@@ -1,5 +1,6 @@
 using System;
 using System.IO.Ports;
+using Library;
 
 /// <summary>
 /// Link.
@@ -83,16 +84,16 @@ namespace Linklaget
 				}
 			}
 			serialPort.Write (buffer, 0, bufferCounter);
-			if(serialPort.WriteBufferSize != bufferCounter){
+			/*if(serialPort.WriteBufferSize != bufferCounter){
 				Console.WriteLine (this.GetType().Name + ": Serial port failed to write " + buffer.ToString());
 				//return;
-			}
+			}*/
 
 			serialPort.Write (startChar, 0, 1);
-			if(serialPort.WriteBufferSize != 1){
+			/*if(serialPort.WriteBufferSize != 1){
 				Console.WriteLine (this.GetType().Name + ": Serial port failed to write " + startChar.ToString());
 				//return;
-			}
+			}*/
 
 		}
 
@@ -144,10 +145,10 @@ namespace Linklaget
 		        else
 		        {
 		            buf[i] = tempData[tempDataCounter];
-		            realDataCounter++;
+		            tempDataCounter++;
 		        }
 		    }
-            Console.WriteLine("From: " + this.GetType().Name + " recieved " + buf.ToString());
+            Console.WriteLine("From: " + this.GetType().Name + " recieved " + LIB.GetString(buf));
 		    return realDataCounter;
 		}
 	}

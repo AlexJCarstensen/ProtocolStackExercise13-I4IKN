@@ -37,6 +37,7 @@ namespace Application
             byte[] fileName = new byte[BUFSIZE];
 			Transport transport = new Transport(BUFSIZE);
 
+            Console.WriteLine("Waiting for client...");
 		    if(transport.receive(ref fileName) < 1) return;
 
             Console.WriteLine("Server recieved " + LIB.GetString(fileName) + " from client.");

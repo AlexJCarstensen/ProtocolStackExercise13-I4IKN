@@ -147,6 +147,7 @@ namespace Transportlaget
 					for (int i = 0; i < recievedSize; i++) {
 						buf [i] = buffer [i + 4];
 					}
+                    Console.WriteLine("From: " + this.GetType().Name + " recieved from client");
 					return recievedSize - 4;
 				}
 			}
