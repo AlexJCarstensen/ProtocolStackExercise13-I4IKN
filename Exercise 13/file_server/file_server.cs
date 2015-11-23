@@ -26,7 +26,6 @@ namespace Application
 
             Console.WriteLine("Waiting for client...");
 		    var fileLength = transport.receive(ref fileName);
-            if (fileLength < 1) return;
 
             Console.WriteLine("Server recieved " + LIB.GetString(fileName) + " from client.");
 
@@ -35,10 +34,14 @@ namespace Application
             long fileSize = LIB.check_File_Exists(LIB.GetString(actualFileName));
 
 		    if (fileSize > 0)
-		        SendFile(LIB.GetString(actualFileName), fileSize, transport);
+            {
+                transport.send(LIB.GetByteArray(fileSize.ToString()), LIB.GetByteArray(fileSize.ToString()).Length);
+                SendFile(LIB.GetString(actualFileName), fileSize, transport);
+            }
 		    else
 		    {
-		        var send = LIB.GetByteArray("File not exist");
+                transport.send(LIB.GetByteArray("0"), LIB.GetByteArray("0").Length);
+		        /*var send = LIB.GetByteArray("File not exist");*/
 		    }
         }
 

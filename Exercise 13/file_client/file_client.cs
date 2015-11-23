@@ -47,10 +47,47 @@ namespace Application
 		/// <param name='transport'>
 		/// Transportlaget
 		/// </param>
-		private void receiveFile (String fileName, Transport transport)
+		private void receiveFile (string fileName, Transport transport)
 		{
             // TO DO Your own code
+		    byte[] recieveSize = new byte[100];
+		    int recievedSizeLength = transport.receive(ref recieveSize);
+            long fileSize = long.Parse(LIB.GetString(recieveSize));
+            Console.WriteLine(fileSize);
             string filePath = @"/home/ikn/Desktop/" + fileName;
+
+
+            FileStream fileStream = new FileStream(filePath, FileMode.Append);
+            BinaryWriter binWriter = new BinaryWriter(fileStream);
+
+            bool run = true;
+
+            while (run)
+            {
+                long size;
+                if (fileSize < BUFSIZE)
+                    size = fileSize;
+                else
+                    size = BUFSIZE;
+
+                fileSize -= size;
+
+
+                byte[] byteFile = new byte[size];
+
+                transport.receive(ref byteFile);
+
+                binWriter.Write(byteFile);
+
+
+                if (fileSize < 1)
+                {
+                    run = false;
+                }
+            }
+            binWriter.Close();
+            fileStream.Close();
+            /*string filePath = @"/home/ikn/Desktop/" + fileName;
 
 
             FileStream fileStream = new FileStream(filePath, FileMode.Append);
@@ -71,7 +108,7 @@ namespace Application
 
             }
             binWriter.Close();
-            fileStream.Close();
+            fileStream.Close();*/
         }
 
 		/// <summary>
