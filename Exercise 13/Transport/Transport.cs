@@ -104,6 +104,7 @@ namespace Transportlaget
 		{
 			// TO DO Your own code
             Array.Clear(buffer,0 , buffer.Length);
+			errorCount = 0;
 			do {
 				for(int i = 0; i < size; i++)
 				{
@@ -114,8 +115,13 @@ namespace Transportlaget
 				buffer[(int)TransCHKSUM.TYPE] = (byte)TransType.DATA;
 
 				checksum.calcChecksum(ref buffer, size + 4);
+				if(errorCount == 0) buffer[0]++;
 
 				link.send (buffer, size + 4);
+				errorCount++;
+
+				if(errorCount > 0)
+					Console.WriteLine("Transport Send recieved nack....\nPackage retransmitted errorCount: " + errorCount);
 
 			} while(!receiveAck());
 		}

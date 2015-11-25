@@ -53,6 +53,12 @@ namespace Application
 		    byte[] recieveSize = new byte[100];
 		    int recievedSizeLength = transport.receive(ref recieveSize);
             long fileSize = long.Parse(LIB.GetString(recieveSize));
+
+			if (fileSize < 1) {
+				Console.WriteLine ("File not found on server");
+				return;
+			}
+
             Console.WriteLine(fileSize);
             string filePath = @"/home/ikn/Desktop/" + fileName;
 
@@ -87,28 +93,6 @@ namespace Application
             }
             binWriter.Close();
             fileStream.Close();
-            /*string filePath = @"/home/ikn/Desktop/" + fileName;
-
-
-            FileStream fileStream = new FileStream(filePath, FileMode.Append);
-            BinaryWriter binWriter = new BinaryWriter(fileStream);
-
-            bool run = true;
-
-            while (run)
-            {
-                var byteFile = new byte[BUFSIZE];
-
-                var size = transport.receive(ref byteFile);
-
-                if (size > 0)
-                    binWriter.Write(byteFile, 0, size);
-                else
-                    run = false;
-
-            }
-            binWriter.Close();
-            fileStream.Close();*/
         }
 
 		/// <summary>
