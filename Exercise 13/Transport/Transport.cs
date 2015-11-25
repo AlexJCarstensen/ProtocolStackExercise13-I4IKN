@@ -40,6 +40,8 @@ namespace Transportlaget
 		/// </summary>
 		private const int DEFAULT_SEQNO = 2;
 
+		private int _myTestCounter = 0;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Transport"/> class.
 		/// </summary>
@@ -87,6 +89,9 @@ namespace Transportlaget
 					(ackType ? buffer [(int)TransCHKSUM.SEQNO] : (Convert.ToInt32(buffer[(int)TransCHKSUM.SEQNO]) + 1) % 2);
 			ackBuf [(int)TransCHKSUM.TYPE] = (byte)(int)TransType.ACK;
 			checksum.calcChecksum (ref ackBuf, (int)TransSize.ACKSIZE);
+
+			if (_myTestCounter == 122)
+				ackBuf [(int)TransCHKSUM.SEQNO]++;
 
 			link.send(ackBuf, (int)TransSize.ACKSIZE);
 		}
@@ -137,6 +142,7 @@ namespace Transportlaget
 		public int receive (ref byte[] buf)
 		{
 			// TO DO Your own code
+			_myTestCounter++;
 			while (true) {
 				int recievedSize = link.receive (ref buffer);
 			    if (recievedSize == 0) return 0;
@@ -153,6 +159,7 @@ namespace Transportlaget
 					return receive(ref buf);
 				}
 				old_seqNo = buffer [(int)TransCHKSUM.SEQNO];
+
 
 				sendAck (true);
                 
