@@ -120,8 +120,10 @@ namespace Transportlaget
 				link.send (buffer, size + 4);
 				errorCount++;
 
-				if(errorCount > 0)
+				if(errorCount > 0){
+					if(errorCount == 1) buffer[0]--;
 					Console.WriteLine("Transport Send recieved nack....\nPackage retransmitted errorCount: " + errorCount);
+				}
 
 			} while(!receiveAck());
 		}
@@ -146,6 +148,12 @@ namespace Transportlaget
 					Console.WriteLine (this.GetType().Name + ": checksum error. Error count = " + errorCount++);
 				}
 
+				if (old_seqNo == buffer [(int)TransCHKSUM.SEQNO]) {
+					Console.WriteLine ("Recieved same package again");
+					return receive(ref buf);
+				}
+				old_seqNo = buffer [(int)TransCHKSUM.SEQNO];
+
 				sendAck (true);
                 
 				if (seqNo == buffer [(int)TransCHKSUM.SEQNO]) {
@@ -154,7 +162,6 @@ namespace Transportlaget
 					for (int i = 0; i < recievedSize - 4; i++) {
 						buf [i] = buffer [i + 4];
 					}
-
 					return recievedSize - 4;
 				}
 			}
