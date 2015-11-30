@@ -90,8 +90,9 @@ namespace Transportlaget
 			ackBuf [(int)TransCHKSUM.TYPE] = (byte)(int)TransType.ACK;
 			checksum.calcChecksum (ref ackBuf, (int)TransSize.ACKSIZE);
 
-			if (_myTestCounter == 122)
-				ackBuf [(int)TransCHKSUM.SEQNO]++;
+			// test code
+			/*if (_myTestCounter == 122)
+				ackBuf [(int)TransCHKSUM.SEQNO]++;*/
 
 			link.send(ackBuf, (int)TransSize.ACKSIZE);
 		}
@@ -125,6 +126,7 @@ namespace Transportlaget
 				link.send (buffer, size + 4);
 				//errorCount++;
 
+				// test code
 				/*if(errorCount > 0){
 					if(errorCount == 1) buffer[0]--;
 					Console.WriteLine("Transport Send recieved nack....\nPackage retransmitted errorCount: " + errorCount);
